@@ -1,0 +1,308 @@
+vue : 一套用于用户构建页面的框架，只关注视图层（view）
+特性：简易，灵活，高效
+
+核心理念：让用户不在操作DOM，让程序员跟多精力放在业务逻辑上
+
+引用：1.引入 vuejs文件
+      2. 创建 <div id = ""app></div>
+      3. var app = new Vue({
+	el:"#app", --元素边界
+	data:{}，--数据存放
+	methods：{} ---函数，方法
+})
+
+指令： v-cloak 解决闪烁问题
+	v-text 覆盖元素内容
+	v-html 解析标签
+	v-bind： 绑定属性 -- 简写  ：title=“”
+	v-on：事件绑定 --简写 @click
+	v-model：（） 双向绑定 只用于表单元素（input select textarea checkbox）
+	v-for 一组数组的选项列表进行渲染  --item in items
+
+eval('')自动解析字符串执行 js代码。
+substring（n，m）字符串获取 n-第几个开始 m-获取几个
+padStart(‘填充的后的长度’，‘填充的内容’)
+findIndex(item =>{})
+includes()判断是否包含在字符串中
+replace（‘替换内容’，‘要替换的==值’）
+
+
+
+
+
+阻止事件:
+prevent:阻止默认事件
+stop ：阻止事件冒泡
+once： 只执行一次事件
+self ：只当事件在该元素本身触发是回调
+
+capture：添加事件侦听器是使用事件铺获模式
+
+
+过滤器 （全局，私有）：Vue。filter（“名字”，function（）{}）；私有的吧filters当属性写进new Vue（{}）
+
+自定义指令 ：
+   全局：Vue.directive('指令名称'，{
+	钩子函数 == 
+	bind：function（el）{}
+	inserted:function(el){}
+	update:function(el){}
+
+})
+
+隐藏元素：v-if 直接删除dom元素
+	v-show：display：none隐藏
+
+实现点击回车键添加内容：@keyup.enter = 'add'
+
+生命周期：
+	beforeCeate:function(){} //vm创建好之前
+	created:function(){}	//vm 创建好之后
+	beforeMount:function(){} //模板挂载之前
+	mounted:function(){}	//模板挂载之后，表示vm已经完全创造好了
+	beforeUpdate:function(){} //模板更新之前，vm实例上的数据已经更新完成，只不过还没更新到模板中区
+	updated:function(){} //同步更新
+	beforeDestroy:function(){} //消亡之前vm上所有东西可以正常执行
+	destroyed:function(){}
+
+ajax异步：1基于 vue-resource.min.js 文件
+	2 this.$http.jsonp/get/('请求地址').then(function(result/结果){})
+	post： this.$http.post('请求地址'，{}，{emulateJSON:true}).then(function(result){})
+
+
+组件化：UI 界面的角度进行划分，方便UI组件的重用
+特点：、拆分Vue实例的代码量
+	能让我们以不同的组件划分不同的模块
+	后期需要什么样的功能就调用什么样的组件
+	可以多次调用
+
+路由：对于单页面应用程序而言主要通过URL中的hash（#）来实现不同页面之间的切换，同时hash有一个特点，HTTP请求中不会包含hash相关的内容，所以单页面应用中页面的跳转主要通过hash实现
+
+
+webpack: 配置
+	cnpm init -y
+	cnpm i jquery -s
+	cnpm i webpack webpack-cli -D
+	cnpm i webpack-dev-server -D  // 自动更新
+	cnpm i html-webpack-plugin -D //自动引入js
+
+mode:'production/development  // webpack4中配置
+
+入口：
+ entry：path.join(__dirname,'路径')，
+出口：
+  output:{
+	path：path.join(__dirname,'路径')
+	filename:'文件名称'
+}
+devServer：{  // package.json 中的 scripts 配置 dev：‘webpack-dev-server’
+	open；true
+	port：端口号
+	hot：true
+	contentBase：‘src’	
+}
+//webpack3 用以下
+plugins：[
+	new webpack.loaderOptionsPlugin({
+		open:true
+		port:4567,
+		hot:true,
+		contentBase:'src'
+		}),
+]
+//自动生成文件
+plugins：[
+	new htmlWebpackPlugin({
+		template:path.join(__dirname,'./src/index.html''),
+		filename:'index.html'
+	})
+]
+//配置 loader
+model:{
+   rules:[
+	//css   style-loader css-loader
+	{
+	test:/\.css$/,use:['style-loader','css-loader']
+      },
+	//less    less he less-loader
+	//sass  sass-loader node-sass
+	//图片 url-loader file-loader
+	{test：/\.(png|jpg|gif|jpeg)/$,loader:'file-loader',options:{
+		name:'[hash:7]-[name].[ext]'
+		}
+	//字体编译 url-loader
+	{test:/\.(svg|eot|ttf|woff|woff2)$/,use:'url-loader'}
+    ]
+}
+
+
+配置 vue 
+
+1 入口文件。js：
+   import Vue from ‘../node_modules/vue/dist/vue.js’
+2 webpack。config。js中   
+
+module。exports ={
+    resolve：{
+          alias:{
+	    'vue$':"vue/dist/vue.js"
+       }
+    }	
+}
+
+配置 .vue 文件
+1 装 "vue-loader": "^15.7.0",   "vue-template-compiler": "^2.6.10",
+2  webpack配置文件新增一条rule：{test: /\.vue$/, use: 'vue-loader'}
+3 webpack.config.js中 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+4 plugins：【new VueLoaderPlugin(),】
+
+5 路由：vue-router
+ 入口文件中:
+	import VueRouter from 'vue-router'
+	Vue.use(VueRouter)
+要有 App.vue  占位符 在使用
+（引入 router。js  对外暴露 export default router;）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
